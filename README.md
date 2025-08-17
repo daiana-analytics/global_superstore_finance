@@ -1,16 +1,12 @@
 # 📊 Global Superstore — Financial Analytics & BI Project
 
+**Author:** Daiana Beltrán  
+**Stack:** MySQL 8 • SQL (ETL, DQ, Modeling, Security) • Power BI • (Optional: Python Forecasting)
+
 📌 **Quick Overview**  
 End-to-end **Financial Analytics & BI project** using SQL & Power BI:  
 ETL → Star Schema → KPIs → Dashboards → BI Security.  
 Simulates **enterprise-grade BI pipeline** for portfolio demonstration.
-
----
-
-# 📊 Global Superstore — Financial Analytics & BI Project
-
-**Author:** Daiana Beltrán  
-**Stack:** MySQL 8 • SQL (ETL, DQ, Modeling, Security) • Power BI • (Optional: Python Forecasting)
 
 ---
 
