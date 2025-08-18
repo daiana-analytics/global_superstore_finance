@@ -1,155 +1,64 @@
-# 📊 Global Superstore — Financial Analytics & BI Project
+# 📊 Global Superstore Finance — SQL & Power BI Project
 
-**Author:** Daiana Beltrán  
-**Stack:** MySQL 8 • SQL (ETL, DQ, Modeling, Security) • Power BI • (Optional: Python Forecasting)
-
-📌 **Quick Overview**  
-End-to-end **Financial Analytics & BI project** using SQL & Power BI:  
-ETL → Star Schema → KPIs → Dashboards → BI Security.  
-Simulates **enterprise-grade BI pipeline** for portfolio demonstration.
+This project implements an end-to-end **Data Analytics** pipeline for the *Global Superstore* dataset with a financial focus.  
+It includes database design, ETL, data modeling, analytical views, and Power BI dashboards.
 
 ---
 
-## 🎯 Executive Summary
-This project delivers an **end-to-end financial analytics pipeline** with professional BI governance:
+## 🚀 Repository Structure
 
-- **Robust ETL** (CSV → STAGE → RAW → CLEAN → STAR).
-- **Finance KPIs** & dashboard-ready aggregates.
-- **Data Quality & Auditing** with issue tracking.
-- **Star Schema (FACT + DIM)** optimized for BI.
-- **Curated BI schema** with read-only role & contract views.
-- **Power BI dashboards** connected via the BI user.
-
-Outcome: A **portfolio-grade BI solution** simulating enterprise standards.
+- 📂 **[sql_scripts/](./sql_scripts/README.md)** → SQL scripts organized by ETL, Modeling, BI, and Admin.  
+- 📂 **[docs/](./docs/README.md)** → Documentation, diagrams, and design notes.  
+- 📂 **[dashboards/](./dashboards/README.md)** → Power BI (.pbix), screenshots, and visual themes.  
 
 ---
 
-## 📂 Scripts & Purpose
+## 📑 Folder Index
 
-🔗 Quick Navigation:  
-[ETL](#-etl) | [Modeling](#-modeling) | [BI](#-bi) | [Admin](#-admin)
-
-### 🔹 ETL
-- [00_create_database.sql](sql_scripts/etl/00_create_database.sql) → Create DB schema `global_superstore_finance`
-- [01_create_stage_table.sql](sql_scripts/etl/01_create_stage_table.sql) → STAGE table (CSV import as-is)
-- [02d_build_stage_norm.sql](sql_scripts/etl/02d_build_stage_norm.sql) → Normalize numeric strings
-- [02d_fix_hyphen_decimal.sql](sql_scripts/etl/02d_fix_hyphen_decimal.sql) → Fix hyphen-as-decimal anomalies
-- [02e_load_raw_from_stage_norm.sql](sql_scripts/etl/02e_load_raw_from_stage_norm.sql) → Load RAW table (guarded casts)
-- [03_load_clean_from_raw.sql](sql_scripts/etl/03_load_clean_from_raw.sql) → Build CLEAN layer (KPIs + flags)
-- [05_data_quality_audit.sql](sql_scripts/etl/05_data_quality_audit.sql) → Data Quality framework (etl_runs, dq_metrics, dq_issues)
+- 🔹 **ETL** → [See scripts](./sql_scripts/etl/README.md)  
+- 🔹 **Modeling** → [See scripts](./sql_scripts/modeling/README.md)  
+- 🔹 **BI** → [See scripts](./sql_scripts/bi/README.md)  
+- 🔹 **Admin** → [See scripts](./sql_scripts/admin/README.md)  
+- 🔹 **Docs** → [See documentation](./docs/README.md)  
+- 🔹 **Dashboards** → [See dashboards](./dashboards/README.md)  
 
 ---
 
-### 🔹 Modeling
-- [08_materialize_star.sql](sql_scripts/modeling/08_materialize_star.sql) → Materialize FACT + DIM tables
-- [09_financial_kpis.sql](sql_scripts/modeling/09_financial_kpis.sql) → KPI views (Revenue, Profit, Margin %, Ticket, Top N, Geo, Monthly)
+## 🎯 Purpose
+
+This repository demonstrates a full **Financial Analytics** workflow:
+
+1. **ETL** → Load and cleanse raw data (STAGE → RAW → CLEAN).  
+2. **Modeling** → Star schema (FACT + DIM) and financial KPIs.  
+3. **BI** → Business views for Power BI dashboards.  
+4. **Admin** → Security, performance, and governance.  
+5. **Docs** → ER diagrams and design decisions.  
+6. **Dashboards** → Final storytelling with Power BI.
 
 ---
 
-### 🔹 BI
-- [04_views_dashboard.sql](sql_scripts/bi/04_views_dashboard.sql) → Finance & dashboard views
-- [06_views_fact.sql](sql_scripts/bi/06_views_fact.sql) → FACT view (valid sales only)
-- [07_views_dimensions.sql](sql_scripts/bi/07_views_dimensions.sql) → DIM views (date, product, geo)
-- [10_dashboard_views.sql](sql_scripts/bi/10_dashboard_views.sql) → Exec, time, product, geo, customer, logistics views
-- [14_publish_bi_views.sql](sql_scripts/bi/14_publish_bi_views.sql) → Publish contract views & optional FACT/DIM
-- [15_verification_tests.sql](sql_scripts/bi/15_verification_tests.sql) → Automated BI validation tests
+## 📌 Dataset
+
+- **Source**: [Global Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final)  
+- **Use**: Public dataset for Data Analytics practice.
 
 ---
 
-### 🔹 Admin
-- [11_admin_and_security.sql](sql_scripts/admin/11_admin_and_security.sql) → Performance tuning + basic BI user
-- [12_bi_role_user.sql](sql_scripts/admin/12_bi_role_user.sql) → BI Role & User (parametrized, idempotent)
-- [13_bi_schema_and_grants.sql](sql_scripts/admin/13_bi_schema_and_grants.sql) → Curated BI schema & SELECT grants
+## 🛠️ Tech Stack
+
+- **SQL** (MySQL / compatible)  
+- **Power BI**  
+- **GitHub** (documentation & version control)
 
 ---
 
-## 💰 Finance KPIs
-From `09_financial_kpis.sql`:
+## 👩‍💻 Author
 
-- **Total Revenue** (`vw_kpi_total_revenue`)  
-- **Total Profit** (`vw_kpi_total_profit`)  
-- **Profit Margin %** (`vw_kpi_profit_margin`)  
-- **Avg Ticket Size** (`vw_kpi_avg_ticket`)  
-- **Top 10 Products / Customers** by sales  
-- **Revenue & Profit by Country**  
-- **Monthly Revenue Trend** with profit  
-
-These feed Power BI **cards & time-series visuals**.
+Project by **Daiana Beltrán**  
+[LinkedIn](https://www.linkedin.com/in/daiana-beltran/) · [GitHub](https://github.com/daiana-analytics)
 
 ---
 
-## 📈 Dashboard Views
-From `10_dashboard_views.sql`:
+> 👉 Looking for the full technical documentation? See the **[Detailed README](./docs/README.md)**.
 
-- **Overview** → revenue, profit, margin, avg ticket, etc.  
-- **Time series (monthly & quarterly)** with MoM deltas.  
-- **Products** → category/subcategory & top 25 by profit.  
-- **Geography** → country & region/state aggregations.  
-- **Customers** → by segment.  
-- **Logistics** → shipping cost, priority, mode.  
 
-Designed for **direct binding to Power BI visuals**.
-
----
-
-## 🔧 Performance Tuning & Security
-From `11_admin_and_security.sql`:
-- Global timeout tuning for dashboard queries.
-- Optimizer statistics refresh.  
-- Creation of **read-only BI user** (`bi_reader`).
-
-From `12–14`:
-- **Role & User** (`bi_reader_role`).
-- **Curated BI schema** (`global_superstore_bi`).
-- **Published BI contract views** (finance, dashboards, FACT & DIM).  
-
-From `15_verification_tests.sql`:
-- Automated checks that BI user can only `SELECT` but **cannot** `INSERT/UPDATE/DELETE/CREATE/DROP`.  
-- Test results logged in `tmp_bi_verify`.
-
----
-
-## 🖥️ Power BI Dashboards
-Pages suggested:
-1. **Executive Summary** (cards + KPIs)  
-2. **Trends** (monthly, quarterly, MoM deltas)  
-3. **Markets & Regions** (maps + geo charts)  
-4. **Customers & Segments** (profitability)  
-5. **Products** (top/bottom, categories)  
-6. **Logistics** (shipping cost & order priority)  
-
----
-
-## 🔒 Security Architecture
-- **Admin schema**: `global_superstore_finance` (all ETL + STAR)  
-- **BI schema**: `global_superstore_bi` (only curated contract views)  
-- **Role-based model**: `bi_reader_role` → bound to `bi_reader@%` user.  
-- **Principle of least privilege**: BI user = `SELECT` only.  
-
-This separation simulates a **professional enterprise BI deployment**.
-
----
-
-## ✅ Run Order
-1. `00` → `08` (DB, ETL, STAR schema)  
-2. `09` → `10` (KPI + Dashboard views)  
-3. `11` → `15` (Admin tuning, BI security, publishing, verification)  
-
----
-
-## 📌 Change Log
-- **2025-08-15**: DB, Stage, Stage_Norm, Raw  
-- **2025-08-16**: Clean, Dashboard, DQ Audit, Star Schema  
-- **2025-08-17**: KPIs, Dashboard Views, Security (Roles, Grants, Publishing, Verification)  
-
----
-
-## 🏆 Portfolio Value
-This repository demonstrates:
-- **ETL proficiency** in SQL.  
-- **Data Quality & Governance**.  
-- **Star schema modeling**.  
-- **Enterprise-level BI security**.  
-- **BI-ready dashboarding** with Power BI.  
-
-A recruiter or hiring manager will immediately see **professional data engineering + analytics maturity**.
