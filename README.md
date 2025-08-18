@@ -5,7 +5,6 @@ It includes database design, ETL, data modeling, analytical views, and Power BI 
 
 ---
 
-## 🚀 Repository Structure
 
 ## 🚀 Repository Structure
 
