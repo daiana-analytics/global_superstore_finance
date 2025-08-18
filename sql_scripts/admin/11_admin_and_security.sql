@@ -14,11 +14,11 @@ SET GLOBAL wait_timeout = 28800;
 SET GLOBAL interactive_timeout = 28800;
 
 -- Refresh optimizer statistics
-ANALYZE TABLE fact_orders;
-ANALYZE TABLE dim_customers;
-ANALYZE TABLE dim_products;
-ANALYZE TABLE dim_dates;
-ANALYZE TABLE dim_geography;
+ANALYZE TABLE fact_sales;
+ANALYZE TABLE dim_product;
+ANALYZE TABLE dim_date;
+ANALYZE TABLE dim_geo;
+
 
 -- =====================================================
 -- 🔒 Security: create read-only BI user

@@ -49,7 +49,7 @@ WITH monthly AS (
   SELECT
     d.year,
     d.month,
-    d.year_month_key                               AS ´year_month´,
+    d.year_month_key                               AS `year_month`,
     ROUND(SUM(f.sales), 2)                         AS revenue,
     ROUND(SUM(f.profit), 2)                        AS profit,
     SUM(f.quantity)                                AS qty,
@@ -65,7 +65,7 @@ WITH monthly AS (
 SELECT
   year,
   month,
-  ´year_month´,
+  `year_month`,
   revenue,
   profit,
   qty,
@@ -190,13 +190,18 @@ SELECT
   f.ship_date,
   f.order_priority,
   f.segment,
-  ROUND(SUM(f.shipping_cost), 2)                   AS shipping_cost,
-  ROUND(SUM(f.sales), 2)                           AS revenue,
-  ROUND(SUM(f.profit), 2)                          AS profit,
-  COUNT(DISTINCT f.order_id)                       AS orders,
-  ROUND(100 * SUM(f.profit)/NULLIF(SUM(f.sales),0), 2) AS margin_pct
+  ROUND(SUM(f.shipping_cost), 2)                                        AS shipping_cost,
+  ROUND(SUM(f.sales), 2)                                                AS revenue,
+  ROUND(SUM(f.profit), 2)                                               AS profit,
+  COUNT(DISTINCT f.order_id)                                            AS orders,
+  ROUND(100 * SUM(f.profit) / NULLIF(SUM(f.sales), 0), 2)               AS margin_pct,
+  -- NUEVO: % de costo de envío sobre ventas
+  ROUND(100 * SUM(f.shipping_cost) / NULLIF(SUM(f.sales), 0), 2)        AS shipping_cost_pct,
+  -- NUEVO: margen después de envío
+  ROUND(100 * (SUM(f.profit) - SUM(f.shipping_cost)) / NULLIF(SUM(f.sales), 0), 2) AS margin_after_ship_pct
 FROM fact_sales f
 GROUP BY f.ship_date, f.order_priority, f.segment
 ORDER BY f.ship_date DESC;
+
 
 

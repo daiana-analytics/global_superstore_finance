@@ -104,7 +104,7 @@ CREATE VIEW vw_monthly_revenue AS
 SELECT 
     d.year,
     d.month,
-    CONCAT(d.year,'-',LPAD(d.month,2,'0')) AS ´year_month´,
+    CONCAT(d.year,'-',LPAD(d.month,2,'0')) AS `year_month`,
     SUM(f.sales) AS total_sales,
     SUM(f.profit) AS total_profit
 FROM fact_sales f
