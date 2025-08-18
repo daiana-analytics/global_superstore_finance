@@ -7,9 +7,12 @@ It includes database design, ETL, data modeling, analytical views, and Power BI 
 
 ## 🚀 Repository Structure
 
-- 📂 **[sql_scripts/](./sql_scripts/README.md)** → SQL scripts organized by ETL, Modeling, BI, and Admin.  
-- 📂 **[docs/](./docs/README.md)** → Documentation, diagrams, and design notes.  
-- 📂 **[dashboards/](./dashboards/README.md)** → Power BI (.pbix), screenshots, and visual themes.  
+## 🚀 Repository Structure
+
+- 📂 [sql_scripts/](./sql_scripts/) → SQL scripts organized by ETL, Modeling, BI, and Admin.  
+- 📂 [docs/](./docs/) → Documentation, diagrams, and design notes.  
+- 📂 [dashboards/](./dashboards/) → Power BI (.pbix), screenshots, and visual themes.  
+
 
 ---
 
