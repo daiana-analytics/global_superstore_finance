@@ -1,7 +1,7 @@
 -- =====================================================
 -- 📂 Script: 08_materialize_star.sql
 -- 📌 Purpose: Materialize the star schema (DIM + FACT tables)
---            from the previously built views to improve BI performance.
+--            from previously built views to improve BI performance.
 -- 👩 Author: Daiana Beltrán
 -- 🗓️ Created: 2025-08-16
 -- 🔁 Idempotent: Yes (drops & rebuilds tables)
@@ -24,16 +24,16 @@ START TRANSACTION;
 DROP TABLE IF EXISTS dim_date;
 
 CREATE TABLE dim_date (
-  `date`           DATE        NOT NULL,
-  `year`           SMALLINT    NOT NULL,
-  `quarter`        TINYINT     NOT NULL,
-  `month`          TINYINT     NOT NULL,
-  `year_month_key` CHAR(7)     NOT NULL,   -- e.g. 2014-12
-  `month_name`     VARCHAR(12) NOT NULL,
-  `iso_week`       TINYINT     NOT NULL,
-  `day_of_month`   TINYINT     NOT NULL,
-  `day_name`       VARCHAR(10) NOT NULL,
-  `is_business_day` TINYINT(1) NOT NULL,
+  `date`            DATE         NOT NULL,
+  `year`            SMALLINT     NOT NULL,
+  `quarter`         TINYINT      NOT NULL,
+  `month`           TINYINT      NOT NULL,
+  `year_month_key`  CHAR(7)      NOT NULL,   -- e.g. 2014-12
+  `month_name`      VARCHAR(12)  NOT NULL,
+  `iso_week`        TINYINT      NOT NULL,
+  `day_of_month`    TINYINT      NOT NULL,
+  `day_name`        VARCHAR(10)  NOT NULL,
+  `is_business_day` TINYINT(1)   NOT NULL,
   PRIMARY KEY (`date`),
   KEY ix_dim_date_year_month (`year`, `month`),
   KEY ix_dim_date_ym_key (`year_month_key`)
@@ -73,7 +73,10 @@ GROUP BY product_id;
 -- =====================================================
 -- 3) GEO DIM (granular composite PK incl. market + postal_code)
 --    PK = (country, region, state, city, market, postal_code)
---    (Fix: include postal_code + market to avoid duplicate PK)
+--    Notes:
+--      - Increase postal_code length to 50 to avoid overflows.
+--      - Use a deterministic placeholder when postal_code is NULL/empty.
+--      - LEFT(...,50) guarantees the value fits the column length.
 -- =====================================================
 DROP TABLE IF EXISTS dim_geo;
 
@@ -83,13 +86,14 @@ CREATE TABLE dim_geo (
   state       VARCHAR(100) NOT NULL,
   city        VARCHAR(100) NOT NULL,
   market      VARCHAR(50)  NOT NULL,
-  postal_code VARCHAR(20)  NOT NULL,
+  postal_code VARCHAR(50)  NOT NULL,  -- increased to 50
   PRIMARY KEY (country, region, state, city, market, postal_code),
   KEY ix_dim_geo_country_region (country, region),
   KEY ix_dim_geo_state_city (state, city),
   KEY ix_dim_geo_market (market)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Use a deterministic placeholder to avoid PK collisions when postal_code is NULL or empty
 INSERT INTO dim_geo (country, region, state, city, market, postal_code)
 SELECT
   country,
@@ -97,7 +101,7 @@ SELECT
   state,
   city,
   market,
-  COALESCE(postal_code, '') AS postal_code
+  LEFT( COALESCE(NULLIF(TRIM(postal_code), ''), CONCAT('UNKNOWN-', state, '-', city)), 50 ) AS postal_code
 FROM vw_dim_geo;
 
 -- =====================================================
@@ -189,10 +193,8 @@ ANALYZE TABLE dim_date, dim_product, dim_geo, fact_sales;
 -- =====================================================
 -- 6) Quick smoke tests (peek small samples)
 -- =====================================================
-SELECT * FROM dim_date    ORDER BY `date`    LIMIT 3;
-SELECT * FROM dim_product ORDER BY product_id LIMIT 3;
-SELECT * FROM dim_geo     LIMIT 3;
-SELECT * FROM fact_sales  LIMIT 3;
-
+SELECT * FROM dim_date    ORDER BY `date`     LIMIT 3;
+SELECT * FROM dim_product ORDER BY product_id  LIMIT 3;
+SELECT * FROM dim_geo                      LIMIT 3;
+SELECT * FROM fact_sales                   LIMIT 3;
 -- End of script
-

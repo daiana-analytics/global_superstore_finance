@@ -43,6 +43,12 @@ PREPARE s FROM @sql; EXECUTE s; DEALLOCATE PREPARE s;
 -- uncomment and adapt the line below to grant directly to the user:
 -- GRANT SELECT ON `global_superstore_bi`.* TO 'bi_reader'@'%';
 
+-- ------------------------------------------------------------------------------
+-- 4) Extra GRANTs required so that INVOKER views can read from the source schema
+-- -------------------------------------------------------------------------------
+GRANT SELECT ON `global_superstore_finance`.* TO bi_reader_role;
+GRANT SELECT ON `global_superstore_bi`.*      TO bi_reader_role;
+
 -- -----------------------------------------------------
 -- 4) Quick verification
 --    (a) Show grants for the role

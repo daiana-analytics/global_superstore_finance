@@ -27,8 +27,8 @@ INSERT INTO gss_orders_raw (
 SELECT
   CAST(`Row ID` AS UNSIGNED) AS row_id,
   `Order ID`                  AS order_id,
-  STR_TO_DATE(`Order Date`, '%d-%m-%Y') AS order_date,  -- Change to '%m/%d/%Y' if your CSV uses slash
-  STR_TO_DATE(`Ship Date`,  '%d-%m-%Y') AS ship_date,
+STR_TO_DATE(REPLACE(TRIM(`Order Date`), '-', '/'), '%e/%c/%Y') AS order_date,
+STR_TO_DATE(REPLACE(TRIM(`Ship Date`),  '-', '/'), '%e/%c/%Y') AS ship_date,
   NULLIF(`Ship Mode`, '')   AS ship_mode,
   NULLIF(`Customer ID`, '') AS customer_id,
   TRIM(`Customer Name`)     AS customer_name,
@@ -64,5 +64,7 @@ SET SESSION sql_mode = @OLD_SQL_MODE;
 --        SUM(profit IS NULL) AS null_profit,
 --        SUM(shipping_cost IS NULL) AS null_shipping
 -- FROM gss_orders_raw;
+
+
 
 

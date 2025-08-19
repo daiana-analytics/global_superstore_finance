@@ -87,14 +87,13 @@ LIMIT 10;
 DROP VIEW IF EXISTS vw_revenue_by_country;
 CREATE VIEW vw_revenue_by_country AS
 SELECT 
-    g.country,
-    SUM(f.sales) AS total_sales,
-    SUM(f.profit) AS total_profit
-FROM fact_sales f
-JOIN dim_geo g 
-    ON f.country = g.country
-GROUP BY g.country
+    country,
+    SUM(sales)  AS total_sales,
+    SUM(profit) AS total_profit
+FROM fact_sales
+GROUP BY country
 ORDER BY total_sales DESC;
+
 
 -- =====================================================
 -- 📅 KPI 8: Monthly Revenue Trend
