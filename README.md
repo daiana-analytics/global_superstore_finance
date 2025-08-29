@@ -1,37 +1,49 @@
 # 📊 Global Superstore Finance — SQL & Power BI Project
 
-**ETL → Star Schema → KPIs → Dashboards (Power BI) with BI governance.**  
-Portfolio repository simulating an enterprise-grade financial analytics pipeline.
+**ETL → Star Schema → KPIs → Dashboards (Power BI) with BI governance (read-only role & contract views).**  
+Portfolio project simulating an enterprise-grade financial analytics pipeline.
+
+<p align="center">
+  <a href="dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit"><b>⬇️ Download PBIT template</b></a> ·
+  <a href="#-power-bi--pages--insights"><b>📺 See dashboard pages</b></a> ·
+  <a href="./docs/README.md"><b>📘 Detailed README</b></a>
+</p>
 
 <div align="center">
-  <img src="dashboards/powerbi/assets/powerbi-dashboard-demo.gif" alt="Power BI dashboard teaser" width="900"/>
+  <img src="dashboards/powerbi/assets/powerbi-dashboard-demo.gif"
+       alt="Power BI demo of the Global Superstore Finance dashboard (overview, trends, operations)"
+       width="900"/>
 </div>
 
 ---
 
-## 🚀 Repository Structure
+## 🔎 Business questions answered
+- Where does revenue come from (acquisition vs. returning) and which segments/categories drive **margin**?
+- Are sales improving **MoM** and **YoY**? Which **quarters/months** concentrate demand?
+- Which **ship mode** sells the most and at what **logistics burden**? Are we meeting the **≤ 4-day SLA**?  
+- Is there **backlog** (orders vs. shipments)?
 
-- 📂 [sql_scripts/](./sql_scripts/) → SQL scripts organized by ETL, Modeling, BI, and Admin.  
-- 📂 [docs/](./docs/) → Documentation, diagrams, and design notes.  
-- 📂 [dashboards/](./dashboards/) → Power BI template (.pbit), demo GIF, and screenshots.  
+---
+
+## 🚀 Repository Structure
+- 📂 **[sql_scripts/](./sql_scripts/)** → SQL scripts organized by ETL, Modeling, BI, and Admin.  
+- 📂 **[docs/](./docs/)** → Documentation, diagrams, and design notes.  
+- 📂 **[dashboards/](./dashboards/)** → Power BI (.pbix/.pbit), screenshots, and visual themes.  
 
 ---
 
 ## 📑 Folder Index
-
-- 🔹 **ETL / Modeling / BI / Admin (SQL)** → [See scripts](./sql_scripts/)  
-- 🔹 **Docs** → [See documentation](./docs/README.md) · ERD: [erd_global_superstore_finance.png](./docs/img/erd_global_superstore_finance.png) · Power BI star view: [powerbi-star-schema.png](./docs/img/powerbi-star-schema.png)  
-- 🔹 **Dashboards (Power BI)** → [Open folder](./dashboards/powerbi/) · Template: [`GlobalSuperstore_Finance_Dashboard.pbit`](./dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit) · Demo GIF: [`powerbi-dashboard-demo.gif`](./dashboards/powerbi/assets/powerbi-dashboard-demo.gif) · Screenshots:  
-  [01 – Financial Overview](./dashboards/powerbi/assets/01-financial-overview.png) ·
-  [02 – Time & Seasonality](./dashboards/powerbi/assets/02-time-and-seasonality.png) ·
-  [03 – Shipping & Operations](./dashboards/powerbi/assets/03-shipping-operations.png)
+- 🔹 **ETL** → [See scripts](./sql_scripts/etl)  
+- 🔹 **Modeling** → [See scripts](./sql_scripts/modeling)  
+- 🔹 **BI** → [See scripts](./sql_scripts/bi)  
+- 🔹 **Admin** → [See scripts](./sql_scripts/admin)  
+- 🔹 **Docs** → [See documentation](./docs)  
+- 🔹 **Dashboards** → [See dashboards](./dashboards)  
 
 ---
 
 ## 🎯 Purpose
-
 This repository demonstrates a full **Financial Analytics** workflow:
-
 1. **ETL** → Load and cleanse raw data (STAGE → RAW → CLEAN).  
 2. **Modeling** → Star schema (FACT + DIM) and financial KPIs.  
 3. **BI** → Business views for Power BI dashboards.  
@@ -41,53 +53,65 @@ This repository demonstrates a full **Financial Analytics** workflow:
 
 ---
 
-## 📈 Power BI — Pages & Insights
+## 🖥️ Power BI — Pages & insights
 
-- **01 – Financial Overview**  
-  Answers: Where does revenue come from (new vs. returning)? Which segment/category leads and at what margin? How do discounts affect margin?  
-  <img src="./dashboards/powerbi/assets/01-financial-overview.png" width="900" alt="Financial Overview"/>
+### 01 — Financial Overview
+*Revenue mix (acquisition vs. returning), segment performance & margin, discount vs. margin scatter with thresholds.*
+<div>
+  <img src="dashboards/powerbi/assets/01-financial-overview.png"
+       alt="Page 1 – Financial Overview: cards, revenue mix, segment margin and discount vs margin scatter"
+       width="900"/>
+</div>
 
-- **02 – Time & Seasonality**  
-  Answers: Are sales improving MoM and YoY? Which quarters/months are strongest?  
-  <img src="./dashboards/powerbi/assets/02-time-and-seasonality.png" width="900" alt="Time & Seasonality"/>
+### 02 — Time & Seasonality
+*MoM & YoY trends, best quarters/months; heatmap by month/year.*
+<div>
+  <img src="dashboards/powerbi/assets/02-time-and-seasonality.png"
+       alt="Page 2 – Time & Seasonality: MoM/YoY line, seasonality by quarter, monthly heatmap"
+       width="900"/>
+</div>
 
-- **03 – Shipping & Operations**  
-  Answers: Are we meeting the SLA (lead time)? Which ship mode sells more and at what shipping burden? Any gap between orders and shipments?  
-  <img src="./dashboards/powerbi/assets/03-shipping-operations.png" width="900" alt="Shipping & Operations"/>
+### 03 — Shipping & Operations
+*SLA compliance (≤ 4 days) by ship mode, sales vs. shipping % by mode, orders vs. shipments (backlog).*
+<div>
+  <img src="dashboards/powerbi/assets/03-shipping-operations.png"
+       alt="Page 3 – Shipping & Operations: lead time by ship mode, sales vs shipping% by mode, orders vs shipments"
+       width="900"/>
+</div>
 
 **DAX Highlights**
-- **Safe deltas**: *Safe % vs LM/LY* (guards against divide-by-zero and missing months).  
-- **Time-intelligence**: YTD, MoM/YoY trends.  
-- **Usability**: constant lines/targets, tooltip measures, curated labels.
+- Safe deltas: robust **`Safe % vs LM/LY`** against slicers and missing months.  
+- Time intelligence: **`YTD`**, **`MoM`**, **`YoY`** measures.  
+- Usability: context-aware tooltips, KPI labels, curated views for BI consumption.
 
-**BI Governance**
-- Read-only BI user (`bi_reader`) with **SELECT-only** privileges.  
-- Published **contract views** for stable Power BI binding.
+**Governance**
+- Read-only BI user (**`bi_reader`**) with **SELECT-only** privileges.  
+- Published **contract views** in the `global_superstore_bi` schema.
 
 ---
 
-## 🧪 How to Run (short)
+## 🧪 How to run (short)
 
-**SQL**
-1. Create DB and run scripts in [`sql_scripts/`](./sql_scripts/) (order by prefix: `00_…` → `15_…`).
-2. Ensure the BI user (`bi_reader`) is created and granted (see admin scripts).
+**1) SQL**
+- Create the DB and run scripts in **`sql_scripts`** in order: `etl/` → `modeling/` → `bi/` → `admin/`.  
+- The read-only BI user **`bi_reader`** (role & grants) is created in `sql_scripts/admin`.
 
-**Power BI**
-1. Open the template: [`GlobalSuperstore_Finance_Dashboard.pbit`](./dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit).  
-2. Point the connection to schema **`global_superstore_bi`**.  
-3. Refresh the model.
+**2) Power BI**
+- Open the template: `dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit`.  
+- Point the connection to schema **`global_superstore_bi`** (contract views).  
+- Refresh the model.
+
+> Need the full step-by-step? See **[Detailed README](./docs/README.md)**.
 
 ---
 
 ## 📌 Dataset
-
 - **Source**: [Global Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final)  
 - **Use**: Public dataset for Data Analytics practice.
 
 ---
 
 ## 🛠️ Tech Stack
-
 - **SQL** (MySQL / compatible)  
 - **Power BI** (DAX)  
 - **GitHub** (documentation & version control)
@@ -95,10 +119,5 @@ This repository demonstrates a full **Financial Analytics** workflow:
 ---
 
 ## 👩‍💻 Author
-
 Project by **Daiana Beltrán**  
 [LinkedIn](https://www.linkedin.com/in/daiana-beltran/) · [GitHub](https://github.com/daiana-analytics)
-
----
-
-> 👉 Looking for the full technical documentation? See the **[Detailed README](./docs/README.md)**.
