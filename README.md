@@ -107,7 +107,7 @@ This repository demonstrates a full **Financial Analytics** workflow:
 ---
 
 
-### DAX Highlights ·  **[KPI Dictionary](./kpi_dictionary.md)**.
+### DAX Highlights · [KPI Dictionary](./docs/kpi_dictionary.md).
 - **Safe deltas:** robust `Safe % vs LM/LY` against slicers and missing months.
 - **Time intelligence:** `YTD`, `MoM`, `YoY` measures.
 - **Usability:** context-aware tooltips, KPI labels, curated views for BI consumption.
