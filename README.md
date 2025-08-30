@@ -53,31 +53,54 @@ This repository demonstrates a full **Financial Analytics** workflow:
 
 ---
 
+<a id="powerbi-pages"></a>
+
 ## 🖥️ Power BI — Pages & insights
 
 ### 01 — Financial Overview
-*Revenue mix (acquisition vs. returning), segment performance & margin, discount vs. margin scatter with thresholds.*
+*Revenue mix, segment performance & margin, discount vs. margin with thresholds.*
 <div>
   <img src="dashboards/powerbi/assets/01-financial-overview.png"
        alt="Page 1 – Financial Overview: cards, revenue mix, segment margin and discount vs margin scatter"
        width="900"/>
 </div>
 
+**Key insights (sample):**
+- **~70% del revenue** proviene de **clientes recurrentes** de forma consistente (2011–2014).  
+- **Consumer** lidera ventas (~**$6.5M**); **Home Office** logra el **mayor margen** (~**11.9%**).  
+- Por **categoría**: **Technology** lidera (~**$4.7M**, margen ~**14%**); **Furniture** vende similar (~**$4.1M**) pero con **margen más bajo** (~**6.9%**).  
+- **Descuento vs. margen**: mediana de **margen 13.8%** y **descuento 9%**; *Tables* cae en cuadrante **alto descuento / margen negativo** (evitar).
+
+---
+
 ### 02 — Time & Seasonality
-*MoM & YoY trends, best quarters/months; heatmap by month/year.*
+*MoM/YoY trends, best quarters/months; heatmap by month/year.*
 <div>
   <img src="dashboards/powerbi/assets/02-time-and-seasonality.png"
        alt="Page 2 – Time & Seasonality: MoM/YoY line, seasonality by quarter, monthly heatmap"
        width="900"/>
 </div>
 
+**Key insights (sample):**
+- **Crecimiento YoY** sostenido (panel muestra **~47%**), con aceleraciones entre **ago–nov**.  
+- **Q4** es el **trimestre pico** cada año (2014 Q4 ~**$1.49M**).  
+- **Diciembre** domina el **mes pico** de ventas de forma consistente.
+
+---
+
 ### 03 — Shipping & Operations
-*SLA compliance (≤ 4 days) by ship mode, sales vs. shipping % by mode, orders vs. shipments (backlog).*
+*SLA (≤4 días) por modo, ventas vs. shipping %, órdenes vs. despachos (backlog).*
 <div>
   <img src="dashboards/powerbi/assets/03-shipping-operations.png"
        alt="Page 3 – Shipping & Operations: lead time by ship mode, sales vs shipping% by mode, orders vs shipments"
        width="900"/>
 </div>
+
+**Key insights (sample):**
+- **SLA**: Same Day (0d), First (2d) y Second (3d) cumplen; **Standard = 5d** (no cumple, foco operacional).  
+- **Eficiencia**: **Standard** concentra ventas (~**$7.6M**) con **menor Shipping %** (~**8.1%**) y **$40.61** por orden; **Same Day** tiene **mayor carga** (~**17.2%**, **$86/orden**).  
+- **Órdenes vs. despachos**: picos de **despachos > órdenes** en fines de año indican **descarga de backlog** (enero vuelve a equilibrio).
+
 
 **DAX Highlights**
 - Safe deltas: robust **`Safe % vs LM/LY`** against slicers and missing months.  
