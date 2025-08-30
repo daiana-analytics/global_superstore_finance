@@ -5,9 +5,10 @@ Portfolio project simulating an enterprise-grade financial analytics pipeline.
 
 <p align="center">
   <a href="dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit"><b>⬇️ Download PBIT template</b></a> ·
-  <a href="#power-bi--pages--insights"><b>📺 See dashboard pages</b></a> ·
+  <a href="#dashboard-pages"><b>📺 See dashboard pages</b></a> ·
   <a href="./docs/README.md"><b>📘 Detailed README</b></a>
 </p>
+
 
 
 <div align="center">
@@ -54,8 +55,8 @@ This repository demonstrates a full **Financial Analytics** workflow:
 
 ---
 
-<a id="powerbi-pages"></a>
-
+---
+<a id="dashboard-pages"></a>
 ## 🖥️ Power BI — Pages & insights
 
 ### 01 — Financial Overview
