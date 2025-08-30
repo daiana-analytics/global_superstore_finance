@@ -1,157 +1,196 @@
 ← Back to overview: [Root README](../README.md)
 
-# 📊 Global Superstore — Financial Analytics & BI Project
+# 📊 Global Superstore — Financial Analytics & BI (Detailed)
 
 **Author:** Daiana Beltrán  
-**Stack:** MySQL 8 • SQL (ETL, DQ, Modeling, Security) • Power BI • (Optional: Python Forecasting)
+**Stack:** MySQL 8 • SQL (ETL, DQ, Modeling, Security) • Power BI (DAX & Storytelling)
 
 ---
 
-📌 **Quick Overview**  
-End-to-end **Financial Analytics & BI project** using SQL & Power BI:  
-ETL → Star Schema → KPIs → Dashboards → BI Security.  
-Simulates **enterprise-grade BI pipeline** for portfolio demonstration.
+## Table of Contents
+- [Executive Summary](#executive-summary)
+- [Business Questions](#business-questions)
+- [Scripts Index](#scripts-index)
+- [Data Model](#data-model)
+- [KPI Dictionary (summary)](#kpi-dictionary-summary)
+- [Power BI — Pages & Insights](#power-bi--pages--insights)
+  - [01) Financial Overview](#01-financial-overview)
+  - [02) Time & Seasonality](#02-time--seasonality)
+  - [03) Shipping & Operations](#03-shipping--operations)
+- [DAX Highlights](#dax-highlights)
+- [How to Run (step-by-step)](#-how-to-run-step-by-step)
+- [Security Architecture](#-security-architecture)
+- [Run Order](#-run-order)
+- [Change Log](#-change-log)
+- [Portfolio Value](#-portfolio-value)
 
 ---
 
-## 🎯 Executive Summary
-This project delivers an **end-to-end financial analytics pipeline** with professional BI governance:
+## Executive Summary
+End-to-end **financial analytics** pipeline with professional BI governance:
 
-- **Robust ETL** (CSV → STAGE → RAW → CLEAN → STAR).
-- **Finance KPIs** & dashboard-ready aggregates.
-- **Data Quality & Auditing** with issue tracking.
-- **Star Schema (FACT + DIM)** optimized for BI.
-- **Curated BI schema** with read-only role & contract views.
-- **Power BI dashboards** connected via the BI user.
+- **Robust ETL:** CSV → STAGE → RAW → CLEAN → STAR (guarded casts, data-quality checks).
+- **Star Schema:** FACT Sales + DIM Date/Product/Customer/Geo (BI-ready).
+- **Finance KPIs:** curated SQL views for revenue, profit, margin %, ticket, discounts, shipping burden.
+- **BI Contract Views:** schema `global_superstore_bi` for safe, stable consumption.
+- **Security:** read-only BI role/user with **SELECT-only** privileges.
+- **Power BI:** executive storytelling with reliable MoM/YoY/YTD and **safe deltas** under slicers.
 
-Outcome: A **portfolio-grade BI solution** simulating enterprise standards.
-
----
-
-## 📂 Scripts & Purpose
-
-🔗 Quick Navigation:  
-[ETL](#-etl) | [Modeling](#-modeling) | [BI](#-bi) | [Admin](#-admin)
-
-### 🔹 ETL
-- [00_create_database.sql](sql_scripts/etl/00_create_database.sql) → Create DB schema `global_superstore_finance`
-- [01_create_stage_table.sql](sql_scripts/etl/01_create_stage_table.sql) → STAGE table (CSV import as-is)
-- [02d_build_stage_norm.sql](sql_scripts/etl/02d_build_stage_norm.sql) → Normalize numeric strings
-- [02d_fix_hyphen_decimal.sql](sql_scripts/etl/02d_fix_hyphen_decimal.sql) → Fix hyphen-as-decimal anomalies
-- [02e_load_raw_from_stage_norm.sql](sql_scripts/etl/02e_load_raw_from_stage_norm.sql) → Load RAW table (guarded casts)
-- [03_load_clean_from_raw.sql](sql_scripts/etl/03_load_clean_from_raw.sql) → Build CLEAN layer (KPIs + flags)
-- [05_data_quality_audit.sql](sql_scripts/etl/05_data_quality_audit.sql) → Data Quality framework (etl_runs, dq_metrics, dq_issues)
+**Outcome:** a portfolio-grade, enterprise-style BI solution.
 
 ---
 
-### 🔹 Modeling
-- [06_views_fact.sql](sql_scripts/bi/06_views_fact.sql) → FACT view (valid sales only)
-- [07_views_dimensions.sql](sql_scripts/bi/07_views_dimensions.sql) → DIM views (date, product, geo)
-- [08_materialize_star.sql](sql_scripts/modeling/08_materialize_star.sql) → Materialize FACT + DIM tables
-- [09_financial_kpis.sql](sql_scripts/modeling/09_financial_kpis.sql) → KPI views (Revenue, Profit, Margin %, Ticket, Top N, Geo, Monthly)
+## Business Questions
+1) Where does **revenue** come from (acquisition vs. returning)? Which **segments/categories** drive **margin**?  
+2) Are sales improving **MoM** and **YoY**? Which **quarters/months** concentrate demand?  
+3) Which **ship mode** sells the most and at what **logistics burden**? Are we meeting the **≤ 4-day SLA**?  
+4) Is there **backlog** (orders vs. shipments)?
 
 ---
 
-### 🔹 BI
-- [04_views_dashboard.sql](sql_scripts/bi/04_views_dashboard.sql) → Finance & dashboard views
-- [10_dashboard_views.sql](sql_scripts/bi/10_dashboard_views.sql) → Exec, time, product, geo, customer, logistics views
-- [12_bi_role_user.sql](sql_scripts/admin/12_bi_role_user.sql) → BI Role & User (parametrized, idempotent)
-- [13_bi_schema_and_grants.sql](sql_scripts/admin/13_bi_schema_and_grants.sql) → Curated BI schema & SELECT grants
-- [14_publish_bi_views.sql](sql_scripts/bi/14_publish_bi_views.sql) → Publish contract views & optional FACT/DIM
-- [15_verification_tests.sql](sql_scripts/bi/15_verification_tests.sql) → Automated BI validation tests
+## Scripts Index
+> Paths are relative to the repo root. Run in **numeric order**.
+
+### ETL — `../sql_scripts/etl`
+- [`00_create_database.sql`](../sql_scripts/etl/00_create_database.sql) — Create DB schema `global_superstore_finance`.
+- [`01_create_stage_table.sql`](../sql_scripts/etl/01_create_stage_table.sql) — STAGE table (raw CSV import).
+- [`02d_build_stage_norm.sql`](../sql_scripts/etl/02d_build_stage_norm.sql) — Normalize numeric strings.
+- [`02d_fix_hyphen_decimal.sql`](../sql_scripts/etl/02d_fix_hyphen_decimal.sql) — Fix hyphen-as-decimal anomalies.
+- [`02e_load_raw_from_stage_norm.sql`](../sql_scripts/etl/02e_load_raw_from_stage_norm.sql) — Load RAW (guarded casts).
+- [`03_load_clean_from_raw.sql`](../sql_scripts/etl/03_load_clean_from_raw.sql) — Build CLEAN layer (flags + ready-to-model).
+- [`05_data_quality_audit.sql`](../sql_scripts/etl/05_data_quality_audit.sql) — DQ framework (`etl_runs`, `dq_metrics`, `dq_issues`).
+
+### Modeling — `../sql_scripts/modeling`
+- [`06_views_fact.sql`](../sql_scripts/modeling/06_views_fact.sql) — FACT Sales (valid sales only).
+- [`07_views_dimensions.sql`](../sql_scripts/modeling/07_views_dimensions.sql) — DIM views (date, product, geo).
+- [`08_materialize_star.sql`](../sql_scripts/modeling/08_materialize_star.sql) — Materialize FACT + DIM tables.
+- [`09_financial_kpis.sql`](../sql_scripts/modeling/09_financial_kpis.sql) — KPI views (Revenue, Profit, Margin %, Ticket, Top N, Geo, Monthly).
+
+### BI — `../sql_scripts/bi`
+- [`04_views_dashboard.sql`](../sql_scripts/bi/04_views_dashboard.sql) — Executive & finance views.
+- [`10_dashboard_views.sql`](../sql_scripts/bi/10_dashboard_views.sql) — Time, product, geo, customer, logistics views.
+- [`14_publish_bi_views.sql`](../sql_scripts/bi/14_publish_bi_views.sql) — Publish contract views (& optional FACT/DIM).
+
+### Admin — `../sql_scripts/admin`
+- [`11_admin_and_security.sql`](../sql_scripts/admin/11_admin_and_security.sql) — Performance tuning + base BI user.
+- [`12_bi_role_user.sql`](../sql_scripts/admin/12_bi_role_user.sql) — Role/User (parametrized, idempotent).
+- [`13_bi_schema_and_grants.sql`](../sql_scripts/admin/13_bi_schema_and_grants.sql) — Curated BI schema & SELECT grants.
+- [`15_verification_tests.sql`](../sql_scripts/admin/15_verification_tests.sql) — Automated BI validation (SELECT-only).
 
 ---
 
-### 🔹 Admin
-- [11_admin_and_security.sql](sql_scripts/admin/11_admin_and_security.sql) → Performance tuning + basic BI user
+## Data Model
+Star schema for analytical consumption (FACT + DIM) with curated BI contract views.
+
+<p align="center">
+  <img src="./img/erd_global_superstore_finance.png" alt="ERD — Global Superstore Finance" width="900"/>
+</p>
 
 ---
 
-## 💰 Finance KPIs
-From `09_financial_kpis.sql`:
+## KPI Dictionary (summary)
+Key measures available in SQL views (also mapped to DAX):
 
-- **Total Revenue** (`vw_kpi_total_revenue`)  
-- **Total Profit** (`vw_kpi_total_profit`)  
-- **Profit Margin %** (`vw_kpi_profit_margin`)  
-- **Avg Ticket Size** (`vw_kpi_avg_ticket`)  
-- **Top 10 Products / Customers** by sales  
-- **Revenue & Profit by Country**  
-- **Monthly Revenue Trend** with profit  
+- **Revenue / Profit / Gross Margin %**
+- **Average Ticket**
+- **Weighted Discount %**
+- **Shipping % of Sales / Shipping Cost per Order**
+- **MoM / YoY / YTD**
+- **Top-N Products/Customers; Geo splits; Monthly trends**
 
-These feed Power BI **cards & time-series visuals**.
-
----
-
-## 📈 Dashboard Views
-From `10_dashboard_views.sql`:
-
-- **Overview** → revenue, profit, margin, avg ticket, etc.  
-- **Time series (monthly & quarterly)** with MoM deltas.  
-- **Products** → category/subcategory & top 25 by profit.  
-- **Geography** → country & region/state aggregations.  
-- **Customers** → by segment.  
-- **Logistics** → shipping cost, priority, mode.  
-
-Designed for **direct binding to Power BI visuals**.
+> Full SQL ↔ DAX mapping can live in `docs/kpi_dictionary.md` (optional).
 
 ---
 
-## 🔧 Performance Tuning & Security
-From `11_admin_and_security.sql`:
-- Global timeout tuning for dashboard queries.
-- Optimizer statistics refresh.  
-- Creation of **read-only BI user** (`bi_reader`).
+## Power BI — Pages & Insights
 
-From `12–14`:
-- **Role & User** (`bi_reader_role`).
-- **Curated BI schema** (`global_superstore_bi`).
-- **Published BI contract views** (finance, dashboards, FACT & DIM).  
+### 01) Financial Overview
+<img src="../dashboards/powerbi/assets/01-financial-overview.png" alt="Page 1 – Financial Overview" width="900"/>
 
-From `15_verification_tests.sql`:
-- Automated checks that BI user can only `SELECT` but **cannot** `INSERT/UPDATE/DELETE/CREATE/DROP`.  
-- Test results logged in `tmp_bi_verify`.
+**Notable insights (2011–2014):**
+- **Revenue mix:** ≈ **70%** of sales from **returning** customers (repeat rate ≈ 64–81% by year).  
+- **Segments (Sales / Margin %):** Consumer **$6.54M** / ~11.4% · Corporate **$3.84M** / ~11.5% · Home Office **$2.33M** / ~11.9%.  
+- **Categories:** Technology **$4.74M** / ~**14%** · Furniture **$4.12M** / ~**6.9%** · Office Supplies **$3.84M** / ~**13.5%**.  
+- **Discount vs. Margin:** medians **9.0%** (discount) and **13.84%** (margin). **Tables** falls into **high-discount / negative-margin** → avoid/reprice.
 
 ---
 
-## 🖥️ Power BI Dashboards
-Pages suggested:
-1. **Executive Summary** (cards + KPIs)  
-2. **Trends** (monthly, quarterly, MoM deltas)  
-3. **Markets & Regions** (maps + geo charts)  
-4. **Customers & Segments** (profitability)  
-5. **Products** (top/bottom, categories)  
-6. **Logistics** (shipping cost & order priority)  
+### 02) Time & Seasonality
+<img src="../dashboards/powerbi/assets/02-time-and-seasonality.png" alt="Page 2 – Time & Seasonality" width="900"/>
+
+**Notable insights:**
+- **YoY growth:** headline ≈ **+47.2%** across the period.  
+- **Quarter seasonality:** **Q4-2014 ≈ $1.49M** (peak), followed by **Q4-2013 ≈ $0.94M**.  
+- **Top months:** **December** leads every year (e.g., **$508k** in 2014), with **Nov/Sep** as secondary peaks.
+
+---
+
+### 03) Shipping & Operations
+<img src="../dashboards/powerbi/assets/03-shipping-operations.png" alt="Page 3 – Shipping & Operations" width="900"/>
+
+**Notable insights:**
+- **SLA (≤ 4 days):** Same Day **0d**, First **2d**, Second **3d** meet target; **Standard = 5d** → **out of SLA**.  
+- **Efficiency by mode:** Standard **$7.61M**, **8.1%** shipping and **$40.61/order** (lowest burden). Same Day is **most expensive** (~**17.2%**, **$86/order**).  
+- **Orders vs. shipments:** year-end **shipments > orders** indicates **backlog clearance**; **January** re-balances.
+
+---
+
+## DAX Highlights
+- **Safe deltas:**  
+  `Safe % vs LM = DIVIDE([Sales Total] - [Sales LM], [Sales LM], 0)`  
+  `Safe % vs LY = DIVIDE([Sales Total] - [Sales LY], [Sales LY], 0)`
+- **Time intelligence:** `TOTALYTD([Sales Total], 'Dim Date'[date])`
+- **Weighted discount:**  
+  `Discount % Weighted = DIVIDE(SUMX('Fact Sales','Fact Sales'[sales]*'Fact Sales'[discount_rate]), [Sales Total])`
+- **Shipping per order:**  
+  `Shipping Cost per Order = DIVIDE([Shipping Cost Total], [Orders])`
+- **Use ship-date relationship:**  
+  `Sales by Ship Date = CALCULATE([Sales Total], USERELATIONSHIP('Fact Sales'[ship_date], 'Dim Date'[date]))`
+
+---
+
+## 🚀 How to Run (step-by-step)
+
+### 1) SQL
+1. Create DB and run scripts in `../sql_scripts` in order: **etl/** → **modeling/** → **bi/** → **admin/**.  
+2. The read-only BI user **`bi_reader`** (role & grants) is created under **admin/**.  
+3. Verification tests ensure the BI user can **SELECT** only.
+
+### 2) Power BI
+1. Open the template: `../dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit`  
+2. Point the connection to schema **`global_superstore_bi`** (contract views).  
+3. Refresh the model.
 
 ---
 
 ## 🔒 Security Architecture
-- **Admin schema**: `global_superstore_finance` (all ETL + STAR)  
-- **BI schema**: `global_superstore_bi` (only curated contract views)  
-- **Role-based model**: `bi_reader_role` → bound to `bi_reader@%` user.  
-- **Principle of least privilege**: BI user = `SELECT` only.  
-
+- **Admin schema:** `global_superstore_finance` (ETL + STAR).  
+- **BI schema:** `global_superstore_bi` (curated **contract views** only).  
+- **Role-based access:** `bi_reader_role` bound to user `bi_reader@%`.  
+- **Least privilege:** BI user = **SELECT-only**.  
 This separation simulates a **professional enterprise BI deployment**.
 
 ---
 
 ## ✅ Run Order
-1. `00` → `08` (DB, ETL, STAR schema)  
-2. `09` → `10` (KPI + Dashboard views)  
-3. `11` → `15` (Admin tuning, BI security, publishing, verification)  
+1) `00 → 08` (DB, ETL, STAR)  
+2) `09 → 10` (KPIs + Dashboard views)  
+3) `11 → 15` (Tuning, BI security, publishing, verification)
 
 ---
 
-## 📌 Change Log
-- **2025-08-15**: DB, Stage, Stage_Norm, Raw  
-- **2025-08-16**: Clean, Dashboard, DQ Audit, Star Schema  
-- **2025-08-17**: KPIs, Dashboard Views, Security (Roles, Grants, Publishing, Verification)  
+## 🧪 Change Log
+- **2025-08-15:** DB, Stage, Stage_Norm, Raw  
+- **2025-08-16:** Clean, Dashboard base views, DQ Audit, Star Schema  
+- **2025-08-17:** KPIs, Dashboard Views, Security (Roles, Grants, Publishing, Verification)
 
 ---
 
 ## 🏆 Portfolio Value
-This repository demonstrates:
-- **ETL proficiency** in SQL.  
-- **Data Quality & Governance**.  
-- **Star schema modeling**.  
-- **Enterprise-level BI security**.  
-- **BI-ready dashboarding** with Power BI.  
+- **ETL proficiency** (SQL)  
+- **Data Quality & Governance**  
+- **Star schema modeling**  
+- **Enterprise BI security**  
+- **BI-ready dashboarding** (Power BI)
+
+
