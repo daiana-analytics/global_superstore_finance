@@ -14,13 +14,13 @@
 - [Data Model](#data-model)
   - [ERD](#erd)
   - [Star schema (Power BI)](#star-schema-power-bi)
-- [Power BI — Pages & insights](#power-bi--pages--insights)
-  - [01 — Financial Overview](#01--financial-overview)
-  - [02 — Time & Seasonality](#02--time--seasonality)
-  - [03 — Shipping & Operations](#03--shipping--operations)
+- [Power BI — Pages & insights](#dashboard-pages)
+  - [01 — Financial Overview](#page-1-financial-overview)
+  - [02 — Time & Seasonality](#page-2-time-and-seasonality)
+  - [03 — Shipping & Operations](#page-3-shipping-and-operations)
 - [DAX Highlights](#dax-highlights)
 - [KPI Dictionary (SQL ↔ DAX)](./kpi_dictionary.md)
-- [How to Run (step-by-step)](#how-to-run-step-by-step)
+- [How to Run (step-by-step)](#how-to-run)
 - [Security Architecture](#security-architecture)
 - [Run Order](#run-order)
 
@@ -114,8 +114,10 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="dashboard-pages"></a>
 ## Power BI — Pages & Insights
 
+<a id="page-1-financial-overview"></a>
 ### 01) Financial Overview
 <img src="../dashboards/powerbi/assets/01-financial-overview.png" alt="Page 1 – Financial Overview" width="900"/>
 
@@ -127,6 +129,7 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="page-2-time-and-seasonality"></a>
 ### 02) Time & Seasonality
 <img src="../dashboards/powerbi/assets/02-time-and-seasonality.png" alt="Page 2 – Time & Seasonality" width="900"/>
 
@@ -137,6 +140,7 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="page-3-shipping-and-operations"></a>
 ### 03) Shipping & Operations
 <img src="../dashboards/powerbi/assets/03-shipping-operations.png" alt="Page 3 – Shipping & Operations" width="900"/>
 
@@ -147,6 +151,7 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="dax-highlights"></a>
 ## DAX Highlights
 - **Safe deltas:**  
   `Safe % vs LM = DIVIDE([Sales Total] - [Sales LM], [Sales LM], 0)`  
@@ -161,6 +166,7 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="how-to-run"></a>
 ## 🚀 How to Run (step-by-step)
 
 ### 1) SQL
@@ -175,6 +181,7 @@ Key measures available in SQL views (also mapped to DAX):
 
 ---
 
+<a id="security-architecture"></a>
 ## 🔒 Security Architecture
 - **Admin schema:** `global_superstore_finance` (ETL + STAR).  
 - **BI schema:** `global_superstore_bi` (curated **contract views** only).  
@@ -184,17 +191,11 @@ This separation simulates a **professional enterprise BI deployment**.
 
 ---
 
+<a id="run-order"></a>
 ## ✅ Run Order
 1) `00 → 08` (DB, ETL, STAR)  
 2) `09 → 10` (KPIs + Dashboard views)  
 3) `11 → 15` (Tuning, BI security, publishing, verification)
-
----
-
-## 🧪 Change Log
-- **2025-08-15:** DB, Stage, Stage_Norm, Raw  
-- **2025-08-16:** Clean, Dashboard base views, DQ Audit, Star Schema  
-- **2025-08-17:** KPIs, Dashboard Views, Security (Roles, Grants, Publishing, Verification)
 
 ---
 
