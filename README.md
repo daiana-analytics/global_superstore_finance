@@ -103,11 +103,14 @@ This repository demonstrates a full **Financial Analytics** workflow:
 - **Orders vs. shipments:** Year-end **shipments > orders** indicates **backlog clearance**; January rebalances.
 
 
+---
 
-### DAX Highlights
+
+### DAX Highlights ·  **[KPI Dictionary](./kpi_dictionary.md)**.
 - **Safe deltas:** robust `Safe % vs LM/LY` against slicers and missing months.
 - **Time intelligence:** `YTD`, `MoM`, `YoY` measures.
 - **Usability:** context-aware tooltips, KPI labels, curated views for BI consumption.
+ **[KPI Dictionary](./kpi_dictionary.md)**.
 
 ### Governance
 - Read-only BI user (`bi_reader`) with **SELECT-only** privileges.
