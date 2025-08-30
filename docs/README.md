@@ -12,17 +12,18 @@
 - [Business Questions](#business-questions)
 - [Scripts Index](#scripts-index)
 - [Data Model](#data-model)
-- [KPI Dictionary (summary)](#kpi-dictionary-summary)
-- [Power BI — Pages & Insights](#power-bi--pages--insights)
-  - [01) Financial Overview](#01-financial-overview)
-  - [02) Time & Seasonality](#02-time--seasonality)
-  - [03) Shipping & Operations](#03-shipping--operations)
+  - [ERD](#erd)
+  - [Star schema (Power BI)](#star-schema-power-bi)
+- [Power BI — Pages & insights](#power-bi--pages--insights)
+  - [01 — Financial Overview](#01--financial-overview)
+  - [02 — Time & Seasonality](#02--time--seasonality)
+  - [03 — Shipping & Operations](#03--shipping--operations)
 - [DAX Highlights](#dax-highlights)
-- [How to Run (step-by-step)](#-how-to-run-step-by-step)
-- [Security Architecture](#-security-architecture)
-- [Run Order](#-run-order)
-- [Change Log](#-change-log)
-- [Portfolio Value](#-portfolio-value)
+- [KPI Dictionary (SQL ↔ DAX)](./kpi_dictionary.md)
+- [How to Run (step-by-step)](#how-to-run-step-by-step)
+- [Security Architecture](#security-architecture)
+- [Run Order](#run-order)
+
 
 ---
 
