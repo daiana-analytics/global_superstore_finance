@@ -65,11 +65,12 @@ This repository demonstrates a full **Financial Analytics** workflow:
        width="900"/>
 </div>
 
-**Key insights (sample):**
-- **~70% del revenue** proviene de **clientes recurrentes** de forma consistente (2011–2014).  
-- **Consumer** lidera ventas (~**$6.5M**); **Home Office** logra el **mayor margen** (~**11.9%**).  
-- Por **categoría**: **Technology** lidera (~**$4.7M**, margen ~**14%**); **Furniture** vende similar (~**$4.1M**) pero con **margen más bajo** (~**6.9%**).  
-- **Descuento vs. margen**: mediana de **margen 13.8%** y **descuento 9%**; *Tables* cae en cuadrante **alto descuento / margen negativo** (evitar).
+**Key insights (sample)**
+- **Revenue mix:** ≈ **70%** of revenue comes from **returning customers** consistently (2011–2014).
+- **Segment performance:** **Consumer** leads sales (≈ **$6.5M**); **Home Office** shows the **highest margin** (≈ **11.9%**).
+- **Category breakdown:** **Technology** leads sales (**$4.7M**, margin ≈ **14%**); **Furniture** sells similarly (**$4.1M**) with **lower margin** (≈ **6.9%**).
+- **Discount vs. margin:** medians **margin 13.8%** and **discount 9%**; **Tables** falls in **high discount / negative margin** quadrant (avoid).
+
 
 ---
 
@@ -96,20 +97,22 @@ This repository demonstrates a full **Financial Analytics** workflow:
        width="900"/>
 </div>
 
-**Key insights (sample):**
-- **SLA**: Same Day (0d), First (2d) y Second (3d) cumplen; **Standard = 5d** (no cumple, foco operacional).  
-- **Eficiencia**: **Standard** concentra ventas (~**$7.6M**) con **menor Shipping %** (~**8.1%**) y **$40.61** por orden; **Same Day** tiene **mayor carga** (~**17.2%**, **$86/orden**).  
-- **Órdenes vs. despachos**: picos de **despachos > órdenes** en fines de año indican **descarga de backlog** (enero vuelve a equilibrio).
+**Key insights**
+- **SLA (≤ 4 days):** Same Day (0d), First (2d) and Second (3d) meet target; **Standard = 5d** → out of SLA.
+- **Efficiency by mode:** **Standard** drives sales (~**$7.6M**) with **lowest shipping burden** (~**8.1%**) and **$40.61/order**. **Same Day** is the most expensive (~**17.2%**, **$86/order**).
+- **Orders vs. shipments:** Year-end **shipments > orders** indicates **backlog clearance**; January rebalances.
 
 
-**DAX Highlights**
-- Safe deltas: robust **`Safe % vs LM/LY`** against slicers and missing months.  
-- Time intelligence: **`YTD`**, **`MoM`**, **`YoY`** measures.  
-- Usability: context-aware tooltips, KPI labels, curated views for BI consumption.
 
-**Governance**
-- Read-only BI user (**`bi_reader`**) with **SELECT-only** privileges.  
-- Published **contract views** in the `global_superstore_bi` schema.
+### DAX Highlights
+- **Safe deltas:** robust `Safe % vs LM/LY` against slicers and missing months.
+- **Time intelligence:** `YTD`, `MoM`, `YoY` measures.
+- **Usability:** context-aware tooltips, KPI labels, curated views for BI consumption.
+
+### Governance
+- Read-only BI user (`bi_reader`) with **SELECT-only** privileges.
+- Published **contract views** under the `global_superstore_bi` schema.
+
 
 ---
 
