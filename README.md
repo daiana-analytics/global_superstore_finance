@@ -65,7 +65,7 @@ This repository demonstrates a full **Financial Analytics** workflow:
        width="900"/>
 </div>
 
-**Key insights (sample)**
+**Key insights**
 - **Revenue mix:** ≈ **70%** of revenue comes from **returning customers** consistently (2011–2014).
 - **Segment performance:** **Consumer** leads sales (≈ **$6.5M**); **Home Office** shows the **highest margin** (≈ **11.9%**).
 - **Category breakdown:** **Technology** leads sales (**$4.7M**, margin ≈ **14%**); **Furniture** sells similarly (**$4.1M**) with **lower margin** (≈ **6.9%**).
@@ -82,7 +82,7 @@ This repository demonstrates a full **Financial Analytics** workflow:
        width="900"/>
 </div>
 
-**Key insights (sample):**
+**Key insights:**
 - **Crecimiento YoY** sostenido (panel muestra **~47%**), con aceleraciones entre **ago–nov**.  
 - **Q4** es el **trimestre pico** cada año (2014 Q4 ~**$1.49M**).  
 - **Diciembre** domina el **mes pico** de ventas de forma consistente.
@@ -99,7 +99,7 @@ This repository demonstrates a full **Financial Analytics** workflow:
 
 **Key insights**
 - **SLA (≤ 4 days):** Same Day (0d), First (2d) and Second (3d) meet target; **Standard = 5d** → out of SLA.
-- **Efficiency by mode:** **Standard** drives sales (~**$7.6M**) with **lowest shipping burden** (~**8.1%**) and **$40.61/order**. **Same Day** is the most expensive (~**17.2%**, **$86/order**).
+- **Efficiency by mode:** **Standard** drives sales (**$7.6M**) with **lower shipping burden** (8.1%) and **$40.61/order**. **Same Day** is the most expensive (≈17.2%, **$86/order**).
 - **Orders vs. shipments:** Year-end **shipments > orders** indicates **backlog clearance**; January rebalances.
 
 
