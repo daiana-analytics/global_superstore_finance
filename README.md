@@ -5,7 +5,7 @@ Portfolio project simulating an enterprise-grade financial analytics pipeline.
 
 <p align="center">
   <a href="dashboards/powerbi/templates/GlobalSuperstore_Finance_Dashboard.pbit"><b>⬇️ Download PBIT template</b></a> ·
-  <a href="#-power-bi--pages--insights"><b>📺 See dashboard pages</b></a> ·
+  <a href="#dashboard-pages"><b>📺 See dashboard pages</b></a> .
   <a href="./docs/README.md"><b>📘 Detailed README</b></a>
 </p>
 
@@ -110,7 +110,7 @@ This repository demonstrates a full **Financial Analytics** workflow:
 - **Safe deltas:** robust `Safe % vs LM/LY` against slicers and missing months.
 - **Time intelligence:** `YTD`, `MoM`, `YoY` measures.
 - **Usability:** context-aware tooltips, KPI labels, curated views for BI consumption.
- **[KPI Dictionary](./kpi_dictionary.md)**.
+
 
 ### Governance
 - Read-only BI user (`bi_reader`) with **SELECT-only** privileges.
