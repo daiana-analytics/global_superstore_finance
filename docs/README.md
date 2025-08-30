@@ -80,11 +80,22 @@ End-to-end **financial analytics** pipeline with professional BI governance:
 ---
 
 ## Data Model
+
+- [ERD](#erd)
+- [Star schema (Power BI)](#star-schema-power-bi)
+
 Star schema for analytical consumption (FACT + DIM) with curated BI contract views.
 
+### ERD
 <p align="center">
   <img src="./img/erd_global_superstore_finance.png" alt="ERD — Global Superstore Finance" width="900"/>
 </p>
+
+### Star schema (Power BI)
+<p align="center">
+  <img src="./img/powerbi-star-schema.png" alt="Power BI star schema — fact_sales with dimensions" width="900"/>
+</p>
+
 
 ---
 
