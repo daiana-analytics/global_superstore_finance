@@ -55,7 +55,6 @@ This repository demonstrates a full **Financial Analytics** workflow:
 
 ---
 
----
 <a id="dashboard-pages"></a>
 ## 🖥️ Power BI — Pages & insights
 
