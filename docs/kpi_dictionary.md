@@ -1,82 +1,98 @@
-← Back to: [Detailed README](./README.md)
+markdown
+← Volver a: [README detallado](./README.md)
 
-# 📘 KPI Dictionary (SQL ↔ DAX)
+# 📘 Diccionario de KPIs (SQL ↔ DAX)
 
-This document aligns **business definitions**, **DAX measures** (Power BI), and **SQL lineage** (contract views) so stakeholders and engineers share the same source of truth.
+Este documento alinea las **definiciones de negocio**, las **medidas DAX** utilizadas en Power BI y el **origen SQL** de cada indicador.  
+El objetivo es que tanto usuarios de negocio como perfiles técnicos trabajen con una misma fuente de verdad.
 
-> **Grain:** Unless noted, all KPIs aggregate at the visual filter context (e.g., Year/Month, Segment, Category).
+> **Nivel de agregación:** salvo que se indique lo contrario, los KPIs se calculan según el contexto de filtro del visual, por ejemplo: año, mes, segmento, categoría o región.
 
 ---
 
-## 1) Revenue & Profit
+## 1) Ventas y rentabilidad
 
-| KPI | Business definition | DAX (measure) | SQL lineage (view.field) | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL (vista.campo) | Nivel / Notas |
 |---|---|---|---|---|
-| **Sales Total** | Total billed revenue in the selected context. | `Sales Total = SUM('Fact Sales'[sales])` | e.g. `global_superstore_bi.vw_kpi_total_revenue.revenue` | Additivity: fully additive. |
-| **Profit Total** | Gross profit in absolute terms. | `Profit Total = SUM('Fact Sales'[profit])` | e.g. `global_superstore_bi.vw_kpi_total_profit.profit` | Depends on cost fields consistency. |
-| **Gross Margin %** | Profit as a % of Sales. | `Gross Margin % = DIVIDE([Profit Total],[Sales Total],0)` | e.g. `global_superstore_bi.vw_kpi_profit_margin.margin_pct` | Use DIVIDE to avoid /0. |
+| **Sales Total** | Total de ventas facturadas en el contexto seleccionado. | `Sales Total = SUM('Fact Sales'[sales])` | Ej.: `global_superstore_bi.vw_kpi_total_revenue.revenue` | Indicador totalmente aditivo. |
+| **Profit Total** | Ganancia bruta en términos absolutos. | `Profit Total = SUM('Fact Sales'[profit])` | Ej.: `global_superstore_bi.vw_kpi_total_profit.profit` | Depende de la consistencia de los campos de costo y ganancia. |
+| **Gross Margin %** | Ganancia expresada como porcentaje de las ventas. | `Gross Margin % = DIVIDE([Profit Total],[Sales Total],0)` | Ej.: `global_superstore_bi.vw_kpi_profit_margin.margin_pct` | Se usa `DIVIDE` para evitar errores por división entre cero. |
 
 ---
 
-## 2) Price, Ticket & Discount
+## 2) Precio, ticket y descuentos
 
-| KPI | Business definition | DAX (measure) | SQL lineage | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL | Nivel / Notas |
 |---|---|---|---|---|
-| **Avg Ticket** | Average revenue per order. | `Avg Ticket = DIVIDE([Sales Total],[Orders])` | e.g. `...vw_kpi_avg_ticket.avg_ticket` | Semi-additive; use at order-level contexts. |
-| **Avg Net Unit Price** | Average net price per unit. | `Avg Net Unit Price = DIVIDE([Sales Total],[Quantity Total])` | derived | Sensitive to mix. |
-| **Weighted Discount %** | Discount weighted by sales volume. | <code>Discount % Weighted = DIVIDE( SUMX('Fact Sales','Fact Sales'[sales]*'Fact Sales'[discount_rate]), [Sales Total] )</code> | e.g. `...vw_kpi_discount_weighted.discount_wt_pct` | Prefer this (not the simple average). |
+| **Avg Ticket** | Ingreso promedio por orden. | `Avg Ticket = DIVIDE([Sales Total],[Orders])` | Ej.: `...vw_kpi_avg_ticket.avg_ticket` | Indicador semi-aditivo. Conviene analizarlo a nivel de orden o agregaciones controladas. |
+| **Avg Net Unit Price** | Precio neto promedio por unidad vendida. | `Avg Net Unit Price = DIVIDE([Sales Total],[Quantity Total])` | Derivado | Es sensible al mix de productos vendidos. |
+| **Weighted Discount %** | Descuento ponderado por volumen de ventas. | <code>Discount % Weighted = DIVIDE( SUMX('Fact Sales','Fact Sales'[sales]*'Fact Sales'[discount_rate]), [Sales Total] )</code> | Ej.: `...vw_kpi_discount_weighted.discount_wt_pct` | Es preferible usar descuento ponderado en lugar de promedio simple. |
 
 ---
 
-## 3) Customers (Acquisition vs. Retention)
+## 3) Clientes: adquisición y retención
 
-| KPI | Business definition | DAX (measure) | SQL lineage | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL | Nivel / Notas |
 |---|---|---|---|---|
-| **Customers** | Distinct customers in filter. | `Customers = DISTINCTCOUNT('Fact Sales'[customer_id])` | e.g. `...vw_customers.customers` | — |
-| **New Customers** | First purchase date falls **inside** the selected period. | `New Customers = CALCULATE( DISTINCTCOUNT('Dim Customer'[customer_id]), TREATAS(VALUES('Dim Date'[date]), 'Dim Customer'[First Purchase Date]) )` | e.g. `...vw_customers.new_customers` | Requires correct `First Purchase Date`. |
-| **Returning Customers** | Customers − New Customers. | `Returning Customers = [Customers] - [New Customers]` | e.g. `...vw_customers.returning_customers` | — |
-| **Revenue New Customers** | Sales from customers whose first purchase is in period. | see DAX above w/ `TREATAS` | e.g. `...vw_revenue.new_customers_revenue` | Used for **Revenue Mix** visual. |
-| **Revenue Returning Customers** | Sales − Revenue New Customers. | `Revenue Returning Customers = [Sales Total] - [Revenue New Customers]` | e.g. `...vw_revenue.returning_customers_revenue` | — |
-| **Repeat Rate %** | Returning / Customers. | `Repeat Rate % = DIVIDE([Returning Customers],[Customers])` | e.g. `...vw_customers.repeat_rate_pct` | — |
+| **Customers** | Cantidad de clientes únicos dentro del filtro aplicado. | `Customers = DISTINCTCOUNT('Fact Sales'[customer_id])` | Ej.: `...vw_customers.customers` | — |
+| **New Customers** | Clientes cuya primera compra ocurre dentro del período seleccionado. | `New Customers = CALCULATE( DISTINCTCOUNT('Dim Customer'[customer_id]), TREATAS(VALUES('Dim Date'[date]), 'Dim Customer'[First Purchase Date]) )` | Ej.: `...vw_customers.new_customers` | Requiere que el campo `First Purchase Date` esté correctamente calculado. |
+| **Returning Customers** | Clientes recurrentes: total de clientes menos clientes nuevos. | `Returning Customers = [Customers] - [New Customers]` | Ej.: `...vw_customers.returning_customers` | — |
+| **Revenue New Customers** | Ventas generadas por clientes cuya primera compra ocurre dentro del período seleccionado. | Ver lógica DAX con `TREATAS` | Ej.: `...vw_revenue.new_customers_revenue` | Se utiliza para el visual de mix de ingresos. |
+| **Revenue Returning Customers** | Ventas generadas por clientes recurrentes. | `Revenue Returning Customers = [Sales Total] - [Revenue New Customers]` | Ej.: `...vw_revenue.returning_customers_revenue` | — |
+| **Repeat Rate %** | Porcentaje de clientes recurrentes sobre el total de clientes. | `Repeat Rate % = DIVIDE([Returning Customers],[Customers])` | Ej.: `...vw_customers.repeat_rate_pct` | — |
 
 ---
 
-## 4) Time Intelligence
+## 4) Inteligencia de tiempo
 
-| KPI | Business definition | DAX (measure) | SQL lineage | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL | Nivel / Notas |
 |---|---|---|---|---|
-| **Sales LM** | Sales last month (relative to current filter). | `Sales LM = CALCULATE([Sales Total], DATEADD('Dim Date'[date],-1,MONTH))` | e.g. `...vw_time.sales_lm` | Relies on complete date table. |
-| **Sales LY** | Sales last year. | `Sales LY = CALCULATE([Sales Total], DATEADD('Dim Date'[date],-1,YEAR))` | e.g. `...vw_time.sales_ly` | — |
-| **Sales MoM %** | (Sales − LM) / LM. | `Sales MoM % = DIVIDE([Sales Total]-[Sales LM],[Sales LM])` | e.g. `...vw_time.sales_mom_pct` | Prefer **safe** % below. |
-| **Sales YoY %** | (Sales − LY) / LY. | `Sales YoY % = DIVIDE([Sales Total]-[Sales LY],[Sales LY])` | e.g. `...vw_time.sales_yoy_pct` | Prefer **safe** % below. |
-| **Safe % vs LM** | Robust MoM % (returns 0 if denom=0). | `Safe % vs LM = DIVIDE([Sales Total]-[Sales LM],[Sales LM],0)` | — | Recommended for cards. |
-| **Safe % vs LY** | Robust YoY % (returns 0 if denom=0). | `Safe % vs LY = DIVIDE([Sales Total]-[Sales LY],[Sales LY],0)` | — | — |
-| **Sales YTD** | Year-to-date total. | `Sales YTD = TOTALYTD([Sales Total],'Dim Date'[date])` | e.g. `...vw_time.sales_ytd` | Mark date table as **Date table**. |
+| **Sales LM** | Ventas del mes anterior según el contexto actual. | `Sales LM = CALCULATE([Sales Total], DATEADD('Dim Date'[date],-1,MONTH))` | Ej.: `...vw_time.sales_lm` | Requiere una tabla calendario completa. |
+| **Sales LY** | Ventas del año anterior según el contexto actual. | `Sales LY = CALCULATE([Sales Total], DATEADD('Dim Date'[date],-1,YEAR))` | Ej.: `...vw_time.sales_ly` | — |
+| **Sales MoM %** | Variación porcentual mes contra mes. | `Sales MoM % = DIVIDE([Sales Total]-[Sales LM],[Sales LM])` | Ej.: `...vw_time.sales_mom_pct` | Se recomienda usar la versión segura indicada abajo. |
+| **Sales YoY %** | Variación porcentual año contra año. | `Sales YoY % = DIVIDE([Sales Total]-[Sales LY],[Sales LY])` | Ej.: `...vw_time.sales_yoy_pct` | Se recomienda usar la versión segura indicada abajo. |
+| **Safe % vs LM** | Variación MoM robusta. Devuelve 0 si el denominador es 0. | `Safe % vs LM = DIVIDE([Sales Total]-[Sales LM],[Sales LM],0)` | — | Recomendada para tarjetas e indicadores ejecutivos. |
+| **Safe % vs LY** | Variación YoY robusta. Devuelve 0 si el denominador es 0. | `Safe % vs LY = DIVIDE([Sales Total]-[Sales LY],[Sales LY],0)` | — | — |
+| **Sales YTD** | Ventas acumuladas desde el inicio del año hasta la fecha filtrada. | `Sales YTD = TOTALYTD([Sales Total],'Dim Date'[date])` | Ej.: `...vw_time.sales_ytd` | La tabla de fechas debe estar marcada como tabla calendario en Power BI. |
 
 ---
 
-## 5) Shipping & Operations
+## 5) Envíos y operación
 
-| KPI | Business definition | DAX (measure) | SQL lineage | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL | Nivel / Notas |
 |---|---|---|---|---|
-| **Shipping Cost Total** | Total shipping cost. | `Shipping Cost Total = SUM('Fact Sales'[shipping_cost])` | e.g. `...vw_shipping.shipping_cost_total` | — |
-| **Shipping % Sales** | Shipping cost as % of sales. | `Shipping % Sales = DIVIDE([Shipping Cost Total],[Sales Total])` | e.g. `...vw_shipping.shipping_pct_sales` | Use as **burden** indicator. |
-| **Shipping Cost per Order** | Average shipping per order. | `Shipping Cost per Order = DIVIDE([Shipping Cost Total],[Orders])` | e.g. `...vw_shipping.shipping_cost_per_order` | Compare across ship modes. |
-| **Lead Time (days)** | Avg days from order to ship. | <code>Lead Time (days) = AVERAGEX('Fact Sales', DATEDIFF('Fact Sales'[order_date],'Fact Sales'[ship_date],DAY))</code> | e.g. `...vw_shipping.lead_time_days` | SLA target ≤ **4 days**. |
-| **Sales by Ship Date** | Sales re-evaluated on ship_date. | <code>Sales by Ship Date = CALCULATE([Sales Total], USERELATIONSHIP('Fact Sales'[ship_date],'Dim Date'[date]))</code> | e.g. `...vw_shipping.sales_by_ship_date` | Enables **Orders vs Shipments** chart. |
+| **Shipping Cost Total** | Costo total de envío. | `Shipping Cost Total = SUM('Fact Sales'[shipping_cost])` | Ej.: `...vw_shipping.shipping_cost_total` | — |
+| **Shipping % Sales** | Costo de envío como porcentaje de las ventas. | `Shipping % Sales = DIVIDE([Shipping Cost Total],[Sales Total])` | Ej.: `...vw_shipping.shipping_pct_sales` | Se utiliza como indicador de carga logística. |
+| **Shipping Cost per Order** | Costo promedio de envío por orden. | `Shipping Cost per Order = DIVIDE([Shipping Cost Total],[Orders])` | Ej.: `...vw_shipping.shipping_cost_per_order` | Útil para comparar eficiencia entre modos de envío. |
+| **Lead Time (days)** | Promedio de días entre la fecha de orden y la fecha de envío. | <code>Lead Time (days) = AVERAGEX('Fact Sales', DATEDIFF('Fact Sales'[order_date],'Fact Sales'[ship_date],DAY))</code> | Ej.: `...vw_shipping.lead_time_days` | Objetivo de SLA: menor o igual a 4 días. |
+| **Sales by Ship Date** | Ventas analizadas según fecha de envío en lugar de fecha de orden. | <code>Sales by Ship Date = CALCULATE([Sales Total], USERELATIONSHIP('Fact Sales'[ship_date],'Dim Date'[date]))</code> | Ej.: `...vw_shipping.sales_by_ship_date` | Permite construir el análisis de órdenes vs. despachos. |
 
 ---
 
-## 6) Concentration
+## 6) Concentración
 
-| KPI | Business definition | DAX (measure) | SQL lineage | Grain / Notes |
+| KPI | Definición de negocio | DAX (medida) | Origen SQL | Nivel / Notas |
 |---|---|---|---|---|
-| **Top 10 Customers %** | Share of sales from top-10 customers. | `TOPN + DIVIDE([Top Sales],[Sales Total])` | e.g. `...vw_concentration.top10_cust_pct` | Risk of dependency. |
-| **Top 10 Products %** | Share of sales from top-10 products. | `TOPN + DIVIDE([Top Sales],[Sales Total])` | e.g. `...vw_concentration.top10_prod_pct` | Risk of dependency. |
+| **Top 10 Customers %** | Participación de ventas generada por los 10 principales clientes. | `TOPN + DIVIDE([Top Sales],[Sales Total])` | Ej.: `...vw_concentration.top10_cust_pct` | Permite evaluar dependencia de pocos clientes. |
+| **Top 10 Products %** | Participación de ventas generada por los 10 principales productos. | `TOPN + DIVIDE([Top Sales],[Sales Total])` | Ej.: `...vw_concentration.top10_prod_pct` | Permite evaluar dependencia de pocos productos. |
 
 ---
 
-### Naming & Governance
-- **Prefix measures** by theme (e.g., *TIME*, *SHIPPING*) if needed.
-- **Document assumptions** (e.g., sales are net of discount).
-- **Use contract views** in `global_superstore_bi` for stable Power BI binding.
+## Gobierno y criterios de nombres
+
+Para mantener consistencia entre SQL, Power BI y documentación:
+
+- Usar nombres claros y consistentes para las medidas.
+- Agrupar medidas por tema cuando sea necesario, por ejemplo: `TIME`, `SHIPPING`, `CUSTOMERS`, `FINANCE`.
+- Documentar supuestos importantes, por ejemplo: si las ventas están netas de descuento.
+- Usar las vistas publicadas en `global_superstore_bi` como capa estable de consumo para Power BI.
+- Evitar que el dashboard dependa directamente de tablas internas de ETL o modelado.
+- Mantener este diccionario actualizado cada vez que se cree, modifique o elimine un KPI.
+
+---
+
+## 👩‍💻 Autora
+
+Documento realizado por **Daiana Beltrán**  
+[LinkedIn](https://www.linkedin.com/in/daiana-beltran/) · [GitHub](https://github.com/daiana-analytics)
+```
